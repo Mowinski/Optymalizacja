@@ -3,13 +3,16 @@ from window import MainForm
 from PyQt4 import QtGui, QtCore, QtOpenGL
 from functions import paint_function, rosenbrock, geem, ackley, restring, goldstein
 import sys, os
-
+from genetic import Genetic
 class Optymalizacja(QtGui.QMainWindow):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
         self.ui = MainForm()
         self.ui.setupUi(self)
+        self.genetic = Genetic(rosenbrock, None, None)
+        self.genetic.randPopulation(1000)
         QtCore.QObject.connect(self.ui.calculateButton, QtCore.SIGNAL("clicked()"), self.calculate)
+        QtCore.QObject.connect(self.ui.epochButton, QtCore.SIGNAL("clicked()"), self.epoch)
 
     def calculate(self):
         if self.ui.function_rosenbrock_2.isChecked():
@@ -25,12 +28,18 @@ class Optymalizacja(QtGui.QMainWindow):
         else:
             raise TypeError('Not selected function')
         f = paint_function([-2, 2], [-2, 2], function)
+        self.genetic.Fd = function
         self.ui.graphicsView_2.setViewport(QtOpenGL.QGLWidget())
         scene = QtGui.QGraphicsScene()
         scene.addPixmap(QtGui.QPixmap(f.name))
         self.ui.graphicsView_2.setScene(scene)
         f.close()
         os.unlink(f.name)
+
+    def epoch(self):
+        self.genetic.sort()
+        self.genetic.newEpoch()
+        print(self.genetic.population[0].cost, self.genetic.population[0])
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

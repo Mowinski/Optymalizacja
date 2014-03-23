@@ -16,6 +16,9 @@ class MainForm:
         self.calculateButton = QtGui.QPushButton(Form)
         self.calculateButton.setGeometry(QtCore.QRect(670, 710, 92, 27))
         self.calculateButton.setObjectName("calculateButton")
+        self.epochButton = QtGui.QPushButton(Form)
+        self.epochButton.setGeometry(QtCore.QRect(570, 710, 92, 27))
+        self.epochButton.setObjectName("epochButton")
         self.widget = QtGui.QWidget(Form)
         self.widget.setGeometry(QtCore.QRect(40, 50, 138, 345))
         self.widget.setObjectName("widget")
@@ -70,7 +73,8 @@ class MainForm:
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QtGui.QApplication.translate("Form", "Algorytmy optymalizacyjne - ewolucyjne", None, QtGui.QApplication.UnicodeUTF8))
-        self.calculateButton.setText(QtGui.QApplication.translate("Form", "Licz", None, QtGui.QApplication.UnicodeUTF8))
+        self.calculateButton.setText(QtGui.QApplication.translate("Form", "Rysuj", None, QtGui.QApplication.UnicodeUTF8))
+        self.epochButton.setText(QtGui.QApplication.translate("Form", "Epoka", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("Form", "Krzyżowanie", None, QtGui.QApplication.UnicodeUTF8))
         self.cross_simple_2.setText(QtGui.QApplication.translate("Form", "Proste", None, QtGui.QApplication.UnicodeUTF8))
         self.cross_artmetic_2.setText(QtGui.QApplication.translate("Form", "Arytmetyczne", None, QtGui.QApplication.UnicodeUTF8))
