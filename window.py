@@ -1,0 +1,86 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'untitled.ui'
+#
+# Created: Tue Mar 11 23:13:17 2014
+#      by: PyQt4 UI code generator 4.6.2
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt4 import QtCore, QtGui
+
+class MainForm:
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(1024, 768)
+        self.calculateButton = QtGui.QPushButton(Form)
+        self.calculateButton.setGeometry(QtCore.QRect(670, 710, 92, 27))
+        self.calculateButton.setObjectName("calculateButton")
+        self.widget = QtGui.QWidget(Form)
+        self.widget.setGeometry(QtCore.QRect(40, 50, 138, 345))
+        self.widget.setObjectName("widget")
+        self.verticalLayout_2 = QtGui.QVBoxLayout(self.widget)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.label_2 = QtGui.QLabel(self.widget)
+        self.label_2.setObjectName("label_2")
+        self.verticalLayout_2.addWidget(self.label_2)
+        self.cross_simple_2 = QtGui.QRadioButton(self.widget)
+        self.cross_simple_2.setMaximumSize(QtCore.QSize(108, 16777215))
+        self.cross_simple_2.setObjectName("cross_simple_2")
+        self.verticalLayout_2.addWidget(self.cross_simple_2)
+        self.cross_artmetic_2 = QtGui.QRadioButton(self.widget)
+        self.cross_artmetic_2.setObjectName("cross_artmetic_2")
+        self.verticalLayout_2.addWidget(self.cross_artmetic_2)
+        self.label_5 = QtGui.QLabel(self.widget)
+        self.label_5.setObjectName("label_5")
+        self.verticalLayout_2.addWidget(self.label_5)
+        self.mutation_unity_2 = QtGui.QRadioButton(self.widget)
+        self.mutation_unity_2.setObjectName("mutation_unity_2")
+        self.verticalLayout_2.addWidget(self.mutation_unity_2)
+        self.mutation_nonunity_2 = QtGui.QRadioButton(self.widget)
+        self.mutation_nonunity_2.setObjectName("mutation_nonunity_2")
+        self.verticalLayout_2.addWidget(self.mutation_nonunity_2)
+        self.mutacion_gradient_2 = QtGui.QRadioButton(self.widget)
+        self.mutacion_gradient_2.setObjectName("mutacion_gradient_2")
+        self.verticalLayout_2.addWidget(self.mutacion_gradient_2)
+        self.label_6 = QtGui.QLabel(self.widget)
+        self.label_6.setObjectName("label_6")
+        self.verticalLayout_2.addWidget(self.label_6)
+        self.function_rosenbrock_2 = QtGui.QRadioButton(self.widget)
+        self.function_rosenbrock_2.setObjectName("function_rosenbrock_2")
+        self.verticalLayout_2.addWidget(self.function_rosenbrock_2)
+        self.function_gem_2 = QtGui.QRadioButton(self.widget)
+        self.function_gem_2.setObjectName("function_gem_2")
+        self.verticalLayout_2.addWidget(self.function_gem_2)
+        self.function_akley_2 = QtGui.QRadioButton(self.widget)
+        self.function_akley_2.setObjectName("function_akley_2")
+        self.verticalLayout_2.addWidget(self.function_akley_2)
+        self.function_rastring_2 = QtGui.QRadioButton(self.widget)
+        self.function_rastring_2.setObjectName("function_rastring_2")
+        self.verticalLayout_2.addWidget(self.function_rastring_2)
+        self.function_golstein_2 = QtGui.QRadioButton(self.widget)
+        self.function_golstein_2.setObjectName("function_golstein_2")
+        self.verticalLayout_2.addWidget(self.function_golstein_2)
+        self.graphicsView_2 = QtGui.QGraphicsView(Form)
+        self.graphicsView_2.setGeometry(QtCore.QRect(190, 50, 820, 650))
+        self.graphicsView_2.setObjectName("graphicsView_2")
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form):
+        Form.setWindowTitle(QtGui.QApplication.translate("Form", "Algorytmy optymalizacyjne - ewolucyjne", None, QtGui.QApplication.UnicodeUTF8))
+        self.calculateButton.setText(QtGui.QApplication.translate("Form", "Licz", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("Form", "Krzyżowanie", None, QtGui.QApplication.UnicodeUTF8))
+        self.cross_simple_2.setText(QtGui.QApplication.translate("Form", "Proste", None, QtGui.QApplication.UnicodeUTF8))
+        self.cross_artmetic_2.setText(QtGui.QApplication.translate("Form", "Arytmetyczne", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_5.setText(QtGui.QApplication.translate("Form", "Mutacja", None, QtGui.QApplication.UnicodeUTF8))
+        self.mutation_unity_2.setText(QtGui.QApplication.translate("Form", "Równomierna", None, QtGui.QApplication.UnicodeUTF8))
+        self.mutation_nonunity_2.setText(QtGui.QApplication.translate("Form", "Nierównomierna", None, QtGui.QApplication.UnicodeUTF8))
+        self.mutacion_gradient_2.setText(QtGui.QApplication.translate("Form", "Gradientowa", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_6.setText(QtGui.QApplication.translate("Form", "Funkcje", None, QtGui.QApplication.UnicodeUTF8))
+        self.function_rosenbrock_2.setText(QtGui.QApplication.translate("Form", "Rosenbrock\'a", None, QtGui.QApplication.UnicodeUTF8))
+        self.function_gem_2.setText(QtGui.QApplication.translate("Form", "Geem", None, QtGui.QApplication.UnicodeUTF8))
+        self.function_akley_2.setText(QtGui.QApplication.translate("Form", "Akley", None, QtGui.QApplication.UnicodeUTF8))
+        self.function_rastring_2.setText(QtGui.QApplication.translate("Form", "Rastringa", None, QtGui.QApplication.UnicodeUTF8))
+        self.function_golstein_2.setText(QtGui.QApplication.translate("Form", "Golsteina-Prica", None, QtGui.QApplication.UnicodeUTF8))
