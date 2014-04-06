@@ -1,7 +1,6 @@
-from bisect import insort_right
-
 __author__ = 'Kamil'
 from random import random, randint
+
 
 class Chromosome:
     def __init__(self, x, y):
@@ -20,11 +19,21 @@ class Chromosome:
     def setCost(self, cost):
         self.cost = float(cost)
 
+    def mutation(self, chance):
+        if random() > chance:
+            if random() > 0.5:
+                self.x += random()-0.5
+                self.xc = str(self.x)
+            else:
+                self.y += random()-0.5
+                self.yc = str(self.y)
+
     def __str__(self):
         return "({0} {1})".format(self.x, self.y)
 
     def __repr__(self):
         return str(self.cost)
+
 
 class Genetic:
     """ Desc
@@ -47,10 +56,12 @@ class Genetic:
     def sort(self):
         self.population = sorted(self.population, key=lambda c: c.cost)
 
-    def newEpoch(self):
+    def newEpoch(self, mutationChance):
         newpopulation = []
         for i in range(1, int(len(self.population)/2), 2):
             c1, c2 = self.population[i-1].mix_simple(self.population[i])
+            c1.mutation(mutationChance)
+            c2.mutation(mutationChance)
             c1.setCost(self.Fd(c1.x, c1.y))
             c2.setCost(self.Fd(c2.x, c2.y))
             newpopulation.append(c1)
@@ -58,3 +69,4 @@ class Genetic:
             newpopulation.append(self.population[i-1])
             newpopulation.append(self.population[i])
         self.population = newpopulation
+        self.sort()

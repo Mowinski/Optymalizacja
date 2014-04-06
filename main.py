@@ -11,8 +11,9 @@ class Optymalizacja(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.genetic = Genetic(rosenbrock, None, None)
         self.genetic.randPopulation(1000)
+        self.epochNumber = 0
         QtCore.QObject.connect(self.ui.calculateButton, QtCore.SIGNAL("clicked()"), self.calculate)
-        QtCore.QObject.connect(self.ui.epochButton, QtCore.SIGNAL("clicked()"), self.epoch)
+        QtCore.QObject.connect(self.ui.stepButton, QtCore.SIGNAL("clicked()"), self.epoch)
 
     def calculate(self):
         if self.ui.function_rosenbrock_2.isChecked():
@@ -35,11 +36,14 @@ class Optymalizacja(QtGui.QMainWindow):
         self.ui.graphicsView_2.setScene(scene)
         f.close()
         os.unlink(f.name)
+        self.epochNumber = 0
 
     def epoch(self):
         self.genetic.sort()
-        self.genetic.newEpoch()
-        print(self.genetic.population[0].cost, self.genetic.population[0])
+        self.genetic.newEpoch(0.01)
+        self.epochNumber += 1
+        self.ui.epochNumber.display(self.epochNumber)
+        self.ui.targetLabel.setText(str(self.genetic.population[0].cost))
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

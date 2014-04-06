@@ -19,7 +19,7 @@ class TestGeneric(unittest.TestCase):
         g.randPopulation(1000)
         for i in range(1000):
             g.sort()
-            g.newEpoch()
+            g.newEpoch(0.1)
         print(g.population[0].cost, g.population[0])
 
 

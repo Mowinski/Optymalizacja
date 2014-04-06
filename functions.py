@@ -1,4 +1,6 @@
 __author__ = 'Kamil'
+import matplotlib
+matplotlib.use("Agg")
 from matplotlib import pyplot as plt
 from tempfile import NamedTemporaryFile
 import numpy
