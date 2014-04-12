@@ -1,7 +1,7 @@
 __author__ = 'Kamil'
 from window import MainForm
 from PyQt4 import QtGui, QtCore, QtOpenGL
-from functions import paint_function, rosenbrock, geem, ackley, restring, goldstein
+from functions import paint_function, rosenbrock, geem, ackley, restring, goldstein, simple
 import sys, os
 from genetic import Genetic
 class Optymalizacja(QtGui.QMainWindow):
@@ -10,7 +10,7 @@ class Optymalizacja(QtGui.QMainWindow):
         self.ui = MainForm()
         self.ui.setupUi(self)
         self.genetic = Genetic(rosenbrock, None, None)
-        self.genetic.randPopulation(1000)
+        self.genetic.randPopulation(10)
         self.epochNumber = 0
         QtCore.QObject.connect(self.ui.calculateButton, QtCore.SIGNAL("clicked()"), self.calculate)
         QtCore.QObject.connect(self.ui.stepButton, QtCore.SIGNAL("clicked()"), self.epoch)
@@ -39,11 +39,15 @@ class Optymalizacja(QtGui.QMainWindow):
         self.epochNumber = 0
 
     def epoch(self):
-        self.genetic.sort()
-        self.genetic.newEpoch(0.01)
-        self.epochNumber += 1
-        self.ui.epochNumber.display(self.epochNumber)
-        self.ui.targetLabel.setText(str(self.genetic.population[0].cost))
+        for i in range(10):
+            self.genetic.sort()
+            self.genetic.newEpoch(0.01)
+            self.epochNumber += 1
+            self.ui.epochNumber.display(self.epochNumber)
+            self.genetic.sort()
+            self.ui.targetLabel.setText(str(round(self.genetic.population[0].cost, 7)))
+            self.ui.coordsLabel.setText("x: {0}\ny: {1}".format(round(self.genetic.population[0].x, 7), round(self.genetic.population[0].y, 7)))
+            print(self.genetic.population[0])
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

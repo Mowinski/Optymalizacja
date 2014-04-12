@@ -1,19 +1,21 @@
 __author__ = 'Kamil'
 from random import random, randint
-
+from functions import bin_to_float, float_to_bin
 
 class Chromosome:
+
     def __init__(self, x, y):
         self.x = float(x)
-        self.xc = str(x)
+        self.xc = float_to_bin(self.x)
         self.y = float(y)
-        self.yc = str(y)
+        self.yc = float_to_bin(self.y)
         self.cost = None
 
     def mix_simple(self, other):
-        tmp = randint(3, len(other.xc)-1)
-        ret1 = Chromosome(self.xc[0:tmp] + other.xc[tmp:], self.yc[0:tmp] + other.yc[tmp:])
-        ret2 = Chromosome(other.xc[0:tmp] + self.xc[tmp:], other.yc[0:tmp] + self.yc[tmp:])
+        tmp = randint(0, min(len(self.xc), len(other.xc)))
+        tmp2 = randint(0, min(len(self.yc), len(other.yc)))
+        ret1 = Chromosome(bin_to_float(self.xc[0:tmp] + other.xc[tmp:]), bin_to_float(self.yc[0:tmp2] + other.yc[tmp2:]))
+        ret2 = Chromosome(bin_to_float(other.xc[0:tmp] + self.xc[tmp:]), bin_to_float(other.yc[0:tmp2] + self.yc[tmp2:]))
         return ret1, ret2
 
     def setCost(self, cost):
@@ -23,13 +25,13 @@ class Chromosome:
         if random() > chance:
             if random() > 0.5:
                 self.x += random()-0.5
-                self.xc = str(self.x)
+                self.xc = float_to_bin(self.x)
             else:
                 self.y += random()-0.5
-                self.yc = str(self.y)
+                self.yc = float_to_bin(self.y)
 
     def __str__(self):
-        return "({0} {1})".format(self.x, self.y)
+        return "({0} {1}) - ({2} {3})".format(self.x, self.y, self.xc, self.yc)
 
     def __repr__(self):
         return str(self.cost)
@@ -43,7 +45,7 @@ class Genetic:
         self.selection =  Fselection # Funkcja selekcji
         self.crossing = Fcrossing
         self.population = []
-        self.randPopulation(100)
+        self.randPopulation(10)
 
     def randPopulation(self, count):
         for i in range(count):
