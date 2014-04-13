@@ -40,12 +40,15 @@ class Chromosome:
 class Genetic:
     """ Desc
     """
-    def __init__(self, Fd, Fselection, Fcrossing):
+    COUNT_POPULATION = 10
+    MUTATION_CHANCE = 0.1
+
+    def __init__(self, Fd, Fselection, Fmutation):
         self.Fd = Fd # Funkcja celu
         self.selection =  Fselection # Funkcja selekcji
-        self.crossing = Fcrossing
+        self.mutation = Fmutation
         self.population = []
-        self.randPopulation(10)
+        self.randPopulation(self.COUNT_POPULATION)
 
     def randPopulation(self, count):
         for i in range(count):
@@ -58,12 +61,12 @@ class Genetic:
     def sort(self):
         self.population = sorted(self.population, key=lambda c: c.cost)
 
-    def newEpoch(self, mutationChance):
+    def newEpoch(self, iter):
         newpopulation = []
         for i in range(1, int(len(self.population)/2), 2):
-            c1, c2 = self.population[i-1].mix_simple(self.population[i])
-            c1.mutation(mutationChance)
-            c2.mutation(mutationChance)
+            c1, c2 = self.selection(self.population[i-1], self.population[i])
+            self.mutation(c1, self.MUTATION_CHANCE, iter)
+            self.mutation(c2, self.MUTATION_CHANCE, iter)
             c1.setCost(self.Fd(c1.x, c1.y))
             c2.setCost(self.Fd(c2.x, c2.y))
             newpopulation.append(c1)

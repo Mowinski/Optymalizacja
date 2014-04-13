@@ -3,15 +3,19 @@ import matplotlib
 matplotlib.use("Agg")
 from matplotlib import pyplot as plt
 from tempfile import NamedTemporaryFile
+from random import randint, random
 import numpy
 
 
-def paint_function(limit_x, limit_y, function, count=1000):
+def paint_function(limit_x, limit_y, function, steps=None, count=1000):
   X,Y = numpy.meshgrid(numpy.linspace(limit_x[0], limit_x[1], count),
                        numpy.linspace(limit_y[0], limit_y[1], count))
   Z = function(X, Y)
   plt.figure()
   plt.contourf(X, Y, Z)
+  if steps:
+      for step in steps:
+          plt.plot(step[0], step[1], 'ro')
   f = NamedTemporaryFile(delete=False)
   plt.savefig(f)
   return f
@@ -40,6 +44,8 @@ def goldstein(x, y):
 def simple(x, y):
     return x*x+y*y
 
+
+# Utilities
 def float_to_bin(x):
     if x < 0:
         ret = '-'
@@ -76,3 +82,49 @@ def bin_to_float(x):
         ret += int(x[1][i-diff]) * 0.5 ** (i+1-diff)
     ret *= -1*diff
     return ret
+
+
+# Selection
+def mix_simple(first, other):
+    from genetic import Chromosome
+    tmp = randint(0, min(len(first.xc), len(other.xc)))
+    tmp2 = randint(0, min(len(first.yc), len(other.yc)))
+    ret1 = Chromosome(bin_to_float(first.xc[0:tmp] + other.xc[tmp:]), bin_to_float(first.yc[0:tmp2] + other.yc[tmp2:]))
+    ret2 = Chromosome(bin_to_float(other.xc[0:tmp] + first.xc[tmp:]), bin_to_float(other.yc[0:tmp2] + first.yc[tmp2:]))
+    return ret1, ret2
+
+
+def aritmic_selection(first, other):
+    from genetic import Chromosome
+    alfa = random()
+    ret1 = Chromosome(first.x * alfa + (1 - alfa) * other.x, first.y * alfa + (1 - alfa) * other.y)
+    ret2 = Chromosome((1 - alfa) * first.x + alfa * other.x, (1 - alfa) * first.y + alfa * other.y)
+    return ret1, ret2
+
+
+# Mutetion
+def mutation(chrom, chance, i):
+    tmp = random()
+    if tmp <= chance:
+        if random() > 0.5:
+            chrom.x += random()-0.5
+            chrom.xc = float_to_bin(chrom.x)
+        else:
+            chrom.y += random()-0.5
+            chrom.yc = float_to_bin(chrom.y)
+
+
+def mutation_nonlinear(chrom, chance, iter):
+    c = 2
+    delta = lambda t, y: y * (1 - random() ** ((1 - t / 100) * c))
+    if random() < chance:
+        if random() > 0.5:
+            if random() > 0.5:
+                chrom.x += delta(iter, 5 - chrom.x)
+            else:
+                chrom.y += delta(iter, 5 - chrom.y)
+        else:
+            if random() > 0.5:
+                chrom.x -= delta(iter, 5 - chrom.x)
+            else:
+                chrom.y -= delta(iter, 5 - chrom.y)
