@@ -1,5 +1,5 @@
 __author__ = 'Kamil'
-from random import random, randint
+from random import random, randint, uniform
 from functions import bin_to_float, float_to_bin
 
 class Chromosome:
@@ -41,19 +41,21 @@ class Genetic:
     """ Desc
     """
     COUNT_POPULATION = 10
-    MUTATION_CHANCE = 0.1
+    MUTATION_CHANCE = 0.01
 
-    def __init__(self, Fd, Fselection, Fmutation):
+    def __init__(self, Fd, Fselection, Fmutation, rangex, rangey):
         self.Fd = Fd # Funkcja celu
         self.selection =  Fselection # Funkcja selekcji
         self.mutation = Fmutation
+        self.rangex = rangex
+        self.rangey = rangey
         self.population = []
         self.randPopulation(self.COUNT_POPULATION)
 
     def randPopulation(self, count):
         for i in range(count):
-            x = (random() - 0.5) * 2
-            y = (random() - 0.5) * 2
+            x = uniform(self.rangex[0], self.rangex[1])
+            y = uniform(self.rangey[0], self.rangey[1])
             c = Chromosome(x, y)
             c.setCost(self.Fd(x, y))
             self.population.append(c)
@@ -75,3 +77,12 @@ class Genetic:
             newpopulation.append(self.population[i])
         self.population = newpopulation
         self.sort()
+
+    def inrange(self, chrom):
+        if not (self.rangex[0] <= chrom.x <= self.rangex[1]):
+            print(chrom.x, 'x', self.rangex)
+            return False
+        if not(self.rangey[0] <= chrom.y <= self.rangey[1]):
+            print(chrom.y, 'y', self.rangey)
+            return False
+        return True
