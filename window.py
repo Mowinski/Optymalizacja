@@ -103,7 +103,7 @@ class MainForm(object):
         self.targetLabel.setGeometry(QtCore.QRect(120, 740, 122, 17))
         self.targetLabel.setObjectName("targetLabel")
         self.coordsLabel = QtGui.QLabel(Form)
-        self.coordsLabel.setGeometry(QtCore.QRect(200, 730, 182, 40))
+        self.coordsLabel.setGeometry(QtCore.QRect(200, 730, 280, 40))
         self.coordsLabel.setObjectName("coordsLabel")
         self.epochNumber = QtGui.QLCDNumber(Form)
         self.epochNumber.setGeometry(QtCore.QRect(660, 700, 64, 23))

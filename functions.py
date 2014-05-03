@@ -41,65 +41,40 @@ def goldstein(x, y):
     return ((1+(x+y+1)**2)*(19-14*x+3*x**2-14**y+6*x*y+3*y**2))\
            *((30+((2*x-3*y)**2)*(18-32*x+12*x**2+48*y-36*x*y+27*y**2)))
 
-def simple(x, y):
-    return x*x+y*y
 
-
-# Utilities
-def float_to_bin(x):
+def to_bin(x):
     if x < 0:
         ret = '-'
         x *= -1
     else:
         ret = ''
-    for i in [6, 5, 4, 3, 2, 1, 0]:
-        tmp = x / 2**i;
+    for i in sorted(range(36), reverse=True):
+        tmp = x / 2**i
         if tmp > 1:
             ret += '1'
             x -= 2**i
         else:
             ret += '0'
-    for i in range(30):
-        x *= 2
-        if x >= 1:
-            ret += '1'
-            x -= 1
-        else:
-            ret += '0'
     return ret
-
-
-def bin_to_float(x):
-    if x[0] == '-':
-        x = [x[1:8], x[8:]]
-        ret = int(x[0], 2)
-        diff = 1
-    else:
-        x = [x[0:7], x[7:]]
-        ret = int(x[0], 2)
-        diff = 0
-    for i in range(len(x[1])):
-        ret += int(x[1][i-diff]) * 0.5 ** (i+1-diff)
-    ret *= -1*diff
-    return ret
-
 
 
 # Selection
 def mix_simple(first, other):
     from genetic import Chromosome
-    tmp = randint(0, min(len(first.xc), len(other.xc)))
-    tmp2 = randint(0, min(len(first.yc), len(other.yc)))
-    ret1 = Chromosome(bin_to_float(first.xc[0:tmp] + other.xc[tmp:]), bin_to_float(first.yc[0:tmp2] + other.yc[tmp2:]))
-    ret2 = Chromosome(bin_to_float(other.xc[0:tmp] + first.xc[tmp:]), bin_to_float(other.yc[0:tmp2] + first.yc[tmp2:]))
+    tmp = randint(0, min(len(first.x), len(other.x)))
+    tmp2 = randint(0, min(len(first.y), len(other.y)))
+    ret1 = Chromosome((first.x[0:tmp] + other.x[tmp:]), (first.y[0:tmp2] + other.y[tmp2:]))
+    ret2 = Chromosome((other.x[0:tmp] + first.x[tmp:]), (other.y[0:tmp2] + first.y[tmp2:]))
     return ret1, ret2
 
 
 def aritmic_selection(first, other):
     from genetic import Chromosome
     alfa = random()
-    ret1 = Chromosome(first.x * alfa + (1 - alfa) * other.x, first.y * alfa + (1 - alfa) * other.y)
-    ret2 = Chromosome((1 - alfa) * first.x + alfa * other.x, (1 - alfa) * first.y + alfa * other.y)
+    fx, fy = int(first.x, 2), int(first.y, 2)
+    ox, oy = int(other.x, 2), int(other.y, 2)
+    ret1 = Chromosome(to_bin(fx * alfa + (1 - alfa) * ox), to_bin(fy * alfa + (1 - alfa) * oy))
+    ret2 = Chromosome(to_bin((1 - alfa) * fx + alfa * ox), to_bin((1 - alfa) * fy + alfa * oy))
     return ret1, ret2
 
 
@@ -107,12 +82,11 @@ def aritmic_selection(first, other):
 def mutation(chrom, chance, i):
     tmp = random()
     if tmp <= chance:
+        i = randint(0, min(len(chrom.x), len(chrom.y))-1)
         if random() > 0.5:
-            chrom.x += random()-0.5
-            chrom.xc = float_to_bin(chrom.x)
+            chrom.x = chrom.x[:i] + ('0' if chrom.x[i] == '1' else '1') + chrom.x[i+1:]
         else:
-            chrom.y += random()-0.5
-            chrom.yc = float_to_bin(chrom.y)
+            chrom.y = chrom.y[:i] + ('0' if chrom.y[i] == '1' else '1') + chrom.y[i+1:]
 
 
 def mutation_nonlinear(chrom, chance, iter):
@@ -121,11 +95,11 @@ def mutation_nonlinear(chrom, chance, iter):
     if random() < chance:
         if random() > 0.5:
             if random() > 0.5:
-                chrom.x += delta(iter, 5 - chrom.x)
+                chrom.x = to_bin(int(chrom.x, 2) + delta(iter, 5 - int(chrom.x, 2)))
             else:
-                chrom.y += delta(iter, 5 - chrom.y)
+                chrom.y = to_bin(int(chrom.y, 2) + delta(iter, 5 - int(chrom.y, 2)))
         else:
             if random() > 0.5:
-                chrom.x -= delta(iter, 5 - chrom.x)
+                chrom.x = to_bin(int(chrom.x, 2) - delta(iter, 5 - int(chrom.x, 2)))
             else:
-                chrom.y -= delta(iter, 5 - chrom.y)
+                chrom.y = to_bin(int(chrom.y, 2) - delta(iter, 5 - int(chrom.y, 2)))
