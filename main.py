@@ -85,7 +85,7 @@ class Optymalizacja(QtGui.QMainWindow):
             self.ui.epochNumber.display(self.epochNumber)
             self.genetic.sort()
             self.ui.targetLabel.setText(str(round(self.genetic.population[0].cost, 7)))
-            self.ui.coordsLabel.setText("x: {0}\ny: {1}".format(round(self.genetic.population[0].x, 7), round(self.genetic.population[0].y, 7)))
+            self.ui.coordsLabel.setText("Rozwiązanie: x: {0} y: {1}".format(round(self.genetic.population[0].x, 7), round(self.genetic.population[0].y, 7)))
             self.steps.append((round(self.genetic.population[0].x, 7), round(self.genetic.population[0].y, 7)))
 
     def draw(self):

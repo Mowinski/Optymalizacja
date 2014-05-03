@@ -78,10 +78,11 @@ def bin_to_float(x):
         x = [x[0:7], x[7:]]
         ret = int(x[0], 2)
         diff = 0
-    for i in range(diff, len(x[1])):
+    for i in range(len(x[1])):
         ret += int(x[1][i-diff]) * 0.5 ** (i+1-diff)
     ret *= -1*diff
     return ret
+
 
 
 # Selection
