@@ -13,11 +13,23 @@ class MainForm(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(1024, 768)
+        self.complate = QtGui.QPushButton(Form)
+        self.complate.setGeometry(QtCore.QRect(630, 730, 90, 27))
+        self.complate.setObjectName("calculateButton")
         self.calculateButton = QtGui.QPushButton(Form)
-        self.calculateButton.setGeometry(QtCore.QRect(730, 700, 92, 27))
+        self.calculateButton.setGeometry(QtCore.QRect(720, 730, 90, 27))
         self.calculateButton.setObjectName("calculateButton")
+
+        self.nlabel = QtGui.QLabel(Form)
+        self.nlabel.setGeometry(QtCore.QRect(630, 700, 50, 27))
+        self.nlabel.setObjectName("milabel")
+
+        self.n = QtGui.QTextEdit(Form)
+        self.n.setGeometry(QtCore.QRect(680, 700, 40, 27))
+        self.n.setObjectName('mi')
+
         self.layoutWidget = QtGui.QWidget(Form)
-        self.layoutWidget.setGeometry(QtCore.QRect(40, 30, 131, 520))
+        self.layoutWidget.setGeometry(QtCore.QRect(40, 30, 131, 540))
         self.layoutWidget.setObjectName("layoutWidget")
         # OPTIONS
         self.verticalLayout_2 = QtGui.QVBoxLayout(self.layoutWidget)
@@ -29,6 +41,7 @@ class MainForm(object):
         self.cross_simple_2.setGeometry(QtCore.QRect(0, 30, 108, 22))
         self.cross_simple_2.setMaximumSize(QtCore.QSize(108, 16777215))
         self.cross_simple_2.setObjectName("cross_simple_2")
+        self.cross_simple_2.toggle()
         self.cross_artmetic_2 = QtGui.QRadioButton(self.selection)
         self.cross_artmetic_2.setGeometry(QtCore.QRect(0, 60, 136, 22))
         self.cross_artmetic_2.setObjectName("cross_artmetic_2")
@@ -39,6 +52,7 @@ class MainForm(object):
         self.mutation_unity_2 = QtGui.QRadioButton(self.mutation)
         self.mutation_unity_2.setGeometry(QtCore.QRect(0, 20, 136, 22))
         self.mutation_unity_2.setObjectName("mutation_unity_2")
+        self.mutation_unity_2.toggle()
         self.mutacion_gradient_2 = QtGui.QRadioButton(self.mutation)
         self.mutacion_gradient_2.setGeometry(QtCore.QRect(0, 50, 136, 22))
         self.mutacion_gradient_2.setObjectName("mutacion_gradient_2")
@@ -52,6 +66,7 @@ class MainForm(object):
         self.function_akley_2 = QtGui.QRadioButton(self.function)
         self.function_akley_2.setGeometry(QtCore.QRect(0, 30, 136, 22))
         self.function_akley_2.setObjectName("function_akley_2")
+        self.function_akley_2.toggle()
         self.function_rastring_2 = QtGui.QRadioButton(self.function)
         self.function_rastring_2.setGeometry(QtCore.QRect(0, 50, 136, 22))
         self.function_rastring_2.setObjectName("function_rastring_2")
@@ -64,9 +79,12 @@ class MainForm(object):
         self.function_rosenbrock_2 = QtGui.QRadioButton(self.function)
         self.function_rosenbrock_2.setGeometry(QtCore.QRect(0, 110, 136, 22))
         self.function_rosenbrock_2.setObjectName("function_rosenbrock_2")
+        self.function_other = QtGui.QRadioButton(self.function)
+        self.function_other.setGeometry(QtCore.QRect(0, 130, 136, 22))
+        self.function_other.setObjectName("function_other")
 
         self.strategy = QtGui.QGroupBox(self.selection)
-        self.strategy.setGeometry(QtCore.QRect(0, 380, 120, 171))
+        self.strategy.setGeometry(QtCore.QRect(0, 400, 120, 171))
         self.strategy.setObjectName("strategy")
         self.strategy_genetic = QtGui.QRadioButton(self.strategy)
         self.strategy_genetic.setGeometry(QtCore.QRect(0, 20, 108, 22))
@@ -77,18 +95,37 @@ class MainForm(object):
         self.strategy_milambda = QtGui.QRadioButton(self.strategy)
         self.strategy_milambda.setGeometry(QtCore.QRect(0, 70, 108, 22))
         self.strategy_milambda.setObjectName("strategy_milambda")
-
+        self.strategy_two = QtGui.QRadioButton(self.strategy)
+        self.strategy_two.setGeometry(QtCore.QRect(0, 100, 108, 22))
+        self.strategy_two.setObjectName("strategy_two")
+        self.strategy_two.toggle()
         self.verticalLayout_2.addWidget(self.selection)
+
+        self.milabel = QtGui.QLabel(Form)
+        self.milabel.setGeometry(QtCore.QRect(30, 570, 92, 27))
+        self.milabel.setObjectName("milabel")
+
+        self.mi = QtGui.QTextEdit(Form)
+        self.mi.setGeometry(QtCore.QRect(120, 570, 30, 27))
+        self.mi.setObjectName('mi')
+
+        self.lambdalabel = QtGui.QLabel(Form)
+        self.lambdalabel.setGeometry(QtCore.QRect(30, 600, 92, 27))
+        self.lambdalabel.setObjectName("lambdalabel")
+
+        self.lambd = QtGui.QTextEdit(Form)
+        self.lambd.setGeometry(QtCore.QRect(120, 600, 30, 27))
+        self.lambd.setObjectName('lambd')
         # END OPTIONS
 
         self.graphicsView_2 = QtGui.QGraphicsView(Form)
         self.graphicsView_2.setGeometry(QtCore.QRect(190, 50, 820, 620))
         self.graphicsView_2.setObjectName("graphicsView_2")
         self.stepButton = QtGui.QPushButton(Form)
-        self.stepButton.setGeometry(QtCore.QRect(560, 700, 92, 27))
+        self.stepButton.setGeometry(QtCore.QRect(460, 730, 92, 27))
         self.stepButton.setObjectName("stepButton")
         self.drawButton = QtGui.QPushButton(Form)
-        self.drawButton.setGeometry(QtCore.QRect(360, 700, 92, 27))
+        self.drawButton.setGeometry(QtCore.QRect(320, 700, 92, 27))
         self.drawButton.setObjectName("stepButton")
         self.label = QtGui.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(40, 740, 91, 17))
@@ -106,7 +143,7 @@ class MainForm(object):
         self.coordsLabel.setGeometry(QtCore.QRect(200, 730, 280, 40))
         self.coordsLabel.setObjectName("coordsLabel")
         self.epochNumber = QtGui.QLCDNumber(Form)
-        self.epochNumber.setGeometry(QtCore.QRect(660, 700, 64, 23))
+        self.epochNumber.setGeometry(QtCore.QRect(560, 730, 64, 27))
         self.epochNumber.setObjectName("epochNumber")
 
         self.rangex = QtGui.QLabel(Form)
@@ -133,8 +170,8 @@ class MainForm(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QtGui.QApplication.translate("Form", "Form", None, QtGui.QApplication.UnicodeUTF8))
-        self.calculateButton.setText(QtGui.QApplication.translate("Form", "Licz", None, QtGui.QApplication.UnicodeUTF8))
-
+        self.calculateButton.setText(QtGui.QApplication.translate("Form", "Rysuj", None, QtGui.QApplication.UnicodeUTF8))
+        self.complate.setText(QtGui.QApplication.translate("Form", "Rozwiaz", None, QtGui.QApplication.UnicodeUTF8))
         self.selection.setTitle(QtGui.QApplication.translate("Form", "Selekcja", None, QtGui.QApplication.UnicodeUTF8))
         self.cross_simple_2.setText(QtGui.QApplication.translate("Form", "Proste", None, QtGui.QApplication.UnicodeUTF8))
         self.cross_artmetic_2.setText(QtGui.QApplication.translate("Form", "Arytmetyczne", None, QtGui.QApplication.UnicodeUTF8))
@@ -143,6 +180,7 @@ class MainForm(object):
         self.strategy_genetic.setText(QtGui.QApplication.translate('Form', 'Alg. Genetyczny', None, QtGui.QApplication.UnicodeUTF8))
         self.strategy_mipluslambda.setText(QtGui.QApplication.translate('Form', 'Strat. (mi + lambda)', None, QtGui.QApplication.UnicodeUTF8))
         self.strategy_milambda.setText(QtGui.QApplication.translate('Form', 'Strat. (mi lambda)', None, QtGui.QApplication.UnicodeUTF8))
+        self.strategy_two.setText(QtGui.QApplication.translate('Form', 'Strat. dwuelementowa', None, QtGui.QApplication.UnicodeUTF8))
 
         self.mutation.setTitle(QtGui.QApplication.translate("Form", "Mutacja", None, QtGui.QApplication.UnicodeUTF8))
         self.mutation_unity_2.setText(QtGui.QApplication.translate("Form", "Równomierna", None, QtGui.QApplication.UnicodeUTF8))
@@ -155,6 +193,7 @@ class MainForm(object):
         self.function_golstein_2.setText(QtGui.QApplication.translate("Form", "Golsteina-Prica", None, QtGui.QApplication.UnicodeUTF8))
         self.function_gem_2.setText(QtGui.QApplication.translate("Form", "Geem", None, QtGui.QApplication.UnicodeUTF8))
         self.function_rosenbrock_2.setText(QtGui.QApplication.translate("Form", "Rosenbrock\'a", None, QtGui.QApplication.UnicodeUTF8))
+        self.function_other.setText(QtGui.QApplication.translate("Form", "Inna", None, QtGui.QApplication.UnicodeUTF8))
 
         self.stepButton.setText(QtGui.QApplication.translate("Form", "Epoka", None, QtGui.QApplication.UnicodeUTF8))
         self.drawButton.setText(QtGui.QApplication.translate("Form", "Rysuj kroki", None, QtGui.QApplication.UnicodeUTF8))
@@ -162,3 +201,16 @@ class MainForm(object):
         self.flabel.setText(QtGui.QApplication.translate("Form", "Funkcja:", None, QtGui.QApplication.UnicodeUTF8))
         self.rangex.setText(QtGui.QApplication.translate("Form", "Zakres X:", None, QtGui.QApplication.UnicodeUTF8))
         self.rangey.setText(QtGui.QApplication.translate("Form", "Zakres Y:", None, QtGui.QApplication.UnicodeUTF8))
+
+        self.milabel.setText(QtGui.QApplication.translate("Form", "Parametr mi (N):", None, QtGui.QApplication.UnicodeUTF8))
+        self.lambdalabel.setText(QtGui.QApplication.translate("Form", "Parametr lambda:", None, QtGui.QApplication.UnicodeUTF8))
+        self.nlabel.setText(QtGui.QApplication.translate("Form", "Ilość iter.", None, QtGui.QApplication.UnicodeUTF8))
+
+        # default text edit
+        self.mi.setText("30")
+        self.lambd.setText("30")
+        self.n.setText("50")
+        self.from_x.setText("-5")
+        self.to_x.setText("5")
+        self.from_y.setText("-5")
+        self.to_y.setText("5")

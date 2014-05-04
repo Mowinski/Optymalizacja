@@ -26,6 +26,7 @@ class Optymalizacja(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.calculateButton, QtCore.SIGNAL("clicked()"), self.calculate)
         QtCore.QObject.connect(self.ui.stepButton, QtCore.SIGNAL("clicked()"), self.epoch)
         QtCore.QObject.connect(self.ui.drawButton, QtCore.SIGNAL("clicked()"), self.draw)
+        QtCore.QObject.connect(self.ui.complate, QtCore.SIGNAL("clicked()"), self.complate)
 
     def calculate(self):
         # Cross
@@ -58,6 +59,14 @@ class Optymalizacja(QtGui.QMainWindow):
         else:
             tmp_function = self.ui.function_recipce.toPlainText()
             self.function = lambda x, y: eval(tmp_function)
+        if self.ui.strategy_genetic.isChecked():
+            strategy = 'genetic'
+        elif self.ui.strategy_two.isChecked():
+            strategy = 'two'
+        elif self.ui.strategy_milambda.isChecked():
+            strategy = 'mi_lambda'
+        elif self.ui.strategy_mipluslambda.isChecked():
+            strategy = 'mi_plus_lambda'
         #limit
         try:
             self.rangex = (float(self.ui.from_x.toPlainText()), float(self.ui.to_x.toPlainText()))
@@ -66,7 +75,9 @@ class Optymalizacja(QtGui.QMainWindow):
             self.rangex = self.LIMIT_X
             self.rangey = self.LIMIT_Y
         f = paint_function(self.rangex, self.rangey, self.function)
-        self.genetic = Genetic(self.function, crossing, fmutation, self.rangex, self.rangey)
+        mi = int(self.ui.mi.toPlainText())
+        lambd = int(self.ui.lambd.toPlainText())
+        self.genetic = Genetic(self.function, crossing, fmutation, strategy, mi, lambd, self.rangex, self.rangey)
         self.steps = []
 
         self.ui.graphicsView_2.setViewport(QtOpenGL.QGLWidget())
@@ -78,17 +89,32 @@ class Optymalizacja(QtGui.QMainWindow):
         self.epochNumber = 0
 
     def epoch(self):
-        for i in range(50):
+        self.genetic.sort()
+        self.genetic.newEpoch(self.epochNumber)
+        self.epochNumber += 1
+        self.ui.epochNumber.display(self.epochNumber)
+        self.genetic.sort()
+        self.ui.targetLabel.setText(str(round(self.genetic.population[0].cost, 7)))
+        self.ui.coordsLabel.setText("Rozwiązanie: x: {0} y: {1}".format(round(self.genetic.population[0].getValueX(self.rangex[0], self.rangex[1]), 7),
+                                                                        round(self.genetic.population[0].getValueY(self.rangey[0], self.rangey[1]), 7)))
+        self.steps.append((round(self.genetic.population[0].getValueX(self.rangex[0], self.rangex[1]), 7),
+                           round(self.genetic.population[0].getValueY(self.rangey[0], self.rangey[1]), 7)))
+
+    def complate(self):
+        n = int(self.ui.n.toPlainText())
+        if not n:
+            raise TypeError('Nie podano warunku zakończenia')
+        for i in range(n):
             self.genetic.sort()
             self.genetic.newEpoch(self.epochNumber)
             self.epochNumber += 1
             self.ui.epochNumber.display(self.epochNumber)
             self.genetic.sort()
-            self.ui.targetLabel.setText(str(round(self.genetic.population[0].cost, 7)))
-            self.ui.coordsLabel.setText("Rozwiązanie: x: {0} y: {1}".format(round(self.genetic.population[0].getValueX(self.rangex[0], self.rangex[1]), 7),
-                                                                            round(self.genetic.population[0].getValueY(self.rangey[0], self.rangey[1]), 7)))
-            self.steps.append((round(self.genetic.population[0].getValueX(self.rangex[0], self.rangex[1]), 7),
-                               round(self.genetic.population[0].getValueY(self.rangey[0], self.rangey[1]), 7)))
+        self.ui.targetLabel.setText(str(round(self.genetic.population[0].cost, 7)))
+        self.ui.coordsLabel.setText("Rozwiązanie: x: {0} y: {1}".format(round(self.genetic.population[0].getValueX(self.rangex[0], self.rangex[1]), 7),
+                                                                        round(self.genetic.population[0].getValueY(self.rangey[0], self.rangey[1]), 7)))
+        self.steps.append((round(self.genetic.population[0].getValueX(self.rangex[0], self.rangex[1]), 7),
+                           round(self.genetic.population[0].getValueY(self.rangey[0], self.rangey[1]), 7)))
 
     def draw(self):
         f = paint_function(self.rangex, self.rangey, self.function, self.steps)
