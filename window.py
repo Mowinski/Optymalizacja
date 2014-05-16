@@ -172,7 +172,7 @@ class MainForm(object):
         Form.setWindowTitle(QtGui.QApplication.translate("Form", "Form", None, QtGui.QApplication.UnicodeUTF8))
         self.calculateButton.setText(QtGui.QApplication.translate("Form", "Rysuj", None, QtGui.QApplication.UnicodeUTF8))
         self.complate.setText(QtGui.QApplication.translate("Form", "Rozwiaz", None, QtGui.QApplication.UnicodeUTF8))
-        self.selection.setTitle(QtGui.QApplication.translate("Form", "Selekcja", None, QtGui.QApplication.UnicodeUTF8))
+        self.selection.setTitle(QtGui.QApplication.translate("Form", "Krzyżowanie", None, QtGui.QApplication.UnicodeUTF8))
         self.cross_simple_2.setText(QtGui.QApplication.translate("Form", "Proste", None, QtGui.QApplication.UnicodeUTF8))
         self.cross_artmetic_2.setText(QtGui.QApplication.translate("Form", "Arytmetyczne", None, QtGui.QApplication.UnicodeUTF8))
 
@@ -180,7 +180,7 @@ class MainForm(object):
         self.strategy_genetic.setText(QtGui.QApplication.translate('Form', 'Alg. Genetyczny', None, QtGui.QApplication.UnicodeUTF8))
         self.strategy_mipluslambda.setText(QtGui.QApplication.translate('Form', 'Strat. (mi + lambda)', None, QtGui.QApplication.UnicodeUTF8))
         self.strategy_milambda.setText(QtGui.QApplication.translate('Form', 'Strat. (mi lambda)', None, QtGui.QApplication.UnicodeUTF8))
-        self.strategy_two.setText(QtGui.QApplication.translate('Form', 'Strat. dwuelementowa', None, QtGui.QApplication.UnicodeUTF8))
+        self.strategy_two.setText(QtGui.QApplication.translate('Form', 'Strat. jednoelementowa', None, QtGui.QApplication.UnicodeUTF8))
 
         self.mutation.setTitle(QtGui.QApplication.translate("Form", "Mutacja", None, QtGui.QApplication.UnicodeUTF8))
         self.mutation_unity_2.setText(QtGui.QApplication.translate("Form", "Równomierna", None, QtGui.QApplication.UnicodeUTF8))
@@ -190,7 +190,7 @@ class MainForm(object):
         self.function.setTitle(QtGui.QApplication.translate("Form", "Funkcje", None, QtGui.QApplication.UnicodeUTF8))
         self.function_akley_2.setText(QtGui.QApplication.translate("Form", "Akley", None, QtGui.QApplication.UnicodeUTF8))
         self.function_rastring_2.setText(QtGui.QApplication.translate("Form", "Rastringa", None, QtGui.QApplication.UnicodeUTF8))
-        self.function_golstein_2.setText(QtGui.QApplication.translate("Form", "Golsteina-Prica", None, QtGui.QApplication.UnicodeUTF8))
+        self.function_golstein_2.setText(QtGui.QApplication.translate("Form", "Goldsteina-Prica", None, QtGui.QApplication.UnicodeUTF8))
         self.function_gem_2.setText(QtGui.QApplication.translate("Form", "Geem", None, QtGui.QApplication.UnicodeUTF8))
         self.function_rosenbrock_2.setText(QtGui.QApplication.translate("Form", "Rosenbrock\'a", None, QtGui.QApplication.UnicodeUTF8))
         self.function_other.setText(QtGui.QApplication.translate("Form", "Inna", None, QtGui.QApplication.UnicodeUTF8))

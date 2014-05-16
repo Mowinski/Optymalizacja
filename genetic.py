@@ -7,6 +7,7 @@ class Chromosome:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+
         self.cost = None
 
     def getValueX(self, min_x, max_x):
