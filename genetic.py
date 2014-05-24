@@ -4,46 +4,47 @@ from functions import to_bin
 
 class Chromosome:
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
+    def __init__(self, *args):
+        self.x = list(args)
         self.cost = None
 
-    def getValueX(self, min_x, max_x):
-        x = int(self.x, 2)
-        n = len(self.x)
+    def getValue(self, min_x, max_x, i):
+        x = int(self.x[i], 2)
+        n = len(self.x[i])
         return min_x + (max_x - min_x) * x / (2**n + 1)
 
-    def getValueY(self, min_y, max_y):
-        y = int(self.y, 2)
-        n = len(self.y)
-        return min_y + (max_y - min_y) * y / (2**n + 1)
+    def getValues(self, range):
+        ret = []
+        i = 0
+        for x in self.x:
+            n = len(x)
+            x = int(x, 2)
+            ret.append(range[i][0] + (range[i][1] - range[i][0]) * x / (2**n + 1))
+            i += 1
+        return ret
 
     def setCost(self, cost):
         self.cost = float(cost)
 
+    def __len__(self):
+        return len(self.x)
+
     def __str__(self):
-        return "({0} {1})".format(self.x, self.y)
-
-    def __repr__(self):
-        return "({0} {1}) : {2}".format(self.x, self.y, self.cost)
-
+        return "{0}".format(self.x)
 
 class Genetic:
     """ Desc
     """
-    MUTATION_CHANCE = 0.01
 
-    def __init__(self, Fd, Fselection, Fmutation, strategy, mi, lambd, rangex, rangey):
+    def __init__(self, Fd, Fselection, Fmutation, strategy, mi, lambd, range, m, chance):
         self.Fd = Fd # Funkcja celu
         self.selection =  Fselection # Funkcja selekcji
         self.mutation = Fmutation
-        self.rangex = rangex
-        self.rangey = rangey
+        self.range = range
         self.population = []
         self.mi = int(mi)
         self.lambd = int(lambd)
+        self.mutation_chance = chance / 100.0
         if strategy == 'genetic':
             self.strategy = self.genetic
         elif strategy == 'two':
@@ -53,15 +54,17 @@ class Genetic:
         elif strategy == 'mi_plus_lambda':
             self.strategy = self.mi_plus_lambda
         self.N = 36
+        self.m = m
         self.randPopulation(self.mi)
 
 
     def randPopulation(self, count):
         for i in range(count):
-            x = self.random_chromosome()
-            y = self.random_chromosome()
-            c = Chromosome(x, y)
-            c.setCost(self.Fd(c.getValueX(self.rangex[0], self.rangex[1]), c.getValueY(self.rangey[0], self.rangey[1])))
+            x = []
+            for j in range(self.m):
+                x.append(self.random_chromosome())
+            c = Chromosome(*x)
+            c.setCost(self.Fd(*c.getValues(self.range)))
             self.population.append(c)
 
     def random_chromosome(self):
@@ -83,10 +86,10 @@ class Genetic:
             index = int(expovariate(1) * 10) % self.mi
             index2 = randint(0, self.mi-1)
             c1, c2 = self.selection(self.population[index], self.population[index2])
-            self.mutation(c1, self.MUTATION_CHANCE, iter)
-            self.mutation(c2, self.MUTATION_CHANCE, iter)
-            c1.setCost(self.Fd(c1.getValueX(self.rangex[0], self.rangex[1]), c1.getValueY(self.rangey[0], self.rangey[1])))
-            c2.setCost(self.Fd(c2.getValueX(self.rangex[0], self.rangex[1]), c2.getValueY(self.rangey[0], self.rangey[1])))
+            self.mutation(c1, self.mutation_chance, iter)
+            self.mutation(c2, self.mutation_chance, iter)
+            c1.setCost(self.Fd(*c1.getValues(self.range)))
+            c2.setCost(self.Fd(*c2.getValues(self.range)))
             new_population.append(c1)
             new_population.append(c2)
         return new_population
@@ -94,12 +97,12 @@ class Genetic:
     def two(self, iter):
         new_population = []
         for chrom in self.population:
-            randx = randint(-2**36, 2**36)
-            randy = randint(-2**36, 2**36)
-            c = Chromosome(to_bin(int(chrom.x, 2) + randx),
-                           to_bin(int(chrom.y, 2) + randy))
-            c.setCost(self.Fd(c.getValueX(self.rangex[0], self.rangex[1]),
-                              c.getValueY(self.rangey[0], self.rangey[1])))
+            tmp = []
+            for i in range(len(chrom)):
+                r = randint(-2**36, 2**36)
+                tmp.append(to_bin(chrom.getValue(self.range[i][0], self.range[i][1], i) + r))
+            c = Chromosome(*tmp)
+            c.setCost(self.Fd(*c.getValues(self.range)))
             if c.cost < chrom.cost:
                 new_population.append(c)
             else:
@@ -113,10 +116,10 @@ class Genetic:
             while par1 == par2:
                 par1, par2 = randint(0, self.mi-1), randint(0, self.mi-1)
             c1, c2 = self.selection(self.population[par1], self.population[par2])
-            self.mutation(c1, self.MUTATION_CHANCE, iter)
-            self.mutation(c2, self.MUTATION_CHANCE, iter)
-            c1.setCost(self.Fd(c1.getValueX(self.rangex[0], self.rangex[1]), c1.getValueY(self.rangey[0], self.rangey[1])))
-            c2.setCost(self.Fd(c2.getValueX(self.rangex[0], self.rangex[1]), c2.getValueY(self.rangey[0], self.rangey[1])))
+            self.mutation(c1, self.mutation_chance, iter)
+            self.mutation(c2, self.mutation_chance, iter)
+            c1.setCost(self.Fd(*c1.getValues(self.range)))
+            c2.setCost(self.Fd(*c2.getValues(self.range)))
             new_population.append(c1)
             new_population.append(c2)
         if self.lambd > self.mi:
@@ -130,10 +133,10 @@ class Genetic:
             while par1 == par2:
                 par1, par2 = randint(0, self.mi-1), randint(0, self.mi-1)
             c1, c2 = self.selection(self.population[par1], self.population[par2])
-            self.mutation(c1, self.MUTATION_CHANCE, iter)
-            self.mutation(c2, self.MUTATION_CHANCE, iter)
-            c1.setCost(self.Fd(c1.getValueX(self.rangex[0], self.rangex[1]), c1.getValueY(self.rangey[0], self.rangey[1])))
-            c2.setCost(self.Fd(c2.getValueX(self.rangex[0], self.rangex[1]), c2.getValueY(self.rangey[0], self.rangey[1])))
+            self.mutation(c1, self.mutation_chance, iter)
+            self.mutation(c2, self.mutation_chance, iter)
+            c1.setCost(self.Fd(*c1.getValues(self.range)))
+            c2.setCost(self.Fd(*c2.getValues(self.range)))
             new_population.append(c1)
             new_population.append(c2)
             new_population.append(self.population[par1])
@@ -141,6 +144,3 @@ class Genetic:
         if self.lambd > self.mi:
             new_population = sorted(new_population, key=lambda c: c.cost)[0:self.mi]
         return new_population
-
-    def genetic_select(self, iter):
-        pass

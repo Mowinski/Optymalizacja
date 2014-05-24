@@ -6,7 +6,7 @@ from functions import mix_simple, aritmic_selection
 from functions import mutation, mutation_nonlinear
 from numpy import *
 from genetic import Genetic
-import sys, os
+import sys, os, re
 
 
 class Optymalizacja(QtGui.QMainWindow):
@@ -21,14 +21,16 @@ class Optymalizacja(QtGui.QMainWindow):
         self.epochNumber = 0
         self.steps = []
         self.function = None
-        self.rangex = []
-        self.rangey = []
+        self.range = []
+        self.chance = 10
+        self.m = 2
         QtCore.QObject.connect(self.ui.calculateButton, QtCore.SIGNAL("clicked()"), self.calculate)
         QtCore.QObject.connect(self.ui.stepButton, QtCore.SIGNAL("clicked()"), self.epoch)
         QtCore.QObject.connect(self.ui.drawButton, QtCore.SIGNAL("clicked()"), self.draw)
         QtCore.QObject.connect(self.ui.complate, QtCore.SIGNAL("clicked()"), self.complate)
+        QtCore.QObject.connect(self.ui.complate_without_draw, QtCore.SIGNAL("clicked()"), self.complate_without_draw)
 
-    def calculate(self):
+    def calculate(self, draw=True):
         # Cross
         if self.ui.cross_simple_2.isChecked():
             crossing = mix_simple
@@ -58,7 +60,11 @@ class Optymalizacja(QtGui.QMainWindow):
             self.function = restring
         else:
             tmp_function = self.ui.function_recipce.toPlainText()
-            self.function = lambda x, y: eval(tmp_function)
+            self.function = lambda *x: eval(tmp_function)
+            m = re.findall("x\[\d\]", tmp_function)
+            chop = lambda x: int(x[2:-1])
+            self.m = max(list(map(chop, m))) + 1
+            print(self.m)
         if self.ui.strategy_genetic.isChecked():
             strategy = 'genetic'
         elif self.ui.strategy_two.isChecked():
@@ -69,23 +75,28 @@ class Optymalizacja(QtGui.QMainWindow):
             strategy = 'mi_plus_lambda'
         #limit
         try:
-            self.rangex = (float(self.ui.from_x.toPlainText()), float(self.ui.to_x.toPlainText()))
-            self.rangey = (float(self.ui.from_y.toPlainText()), float(self.ui.to_y.toPlainText()))
+            tmp = self.ui.range.toPlainText()
+            tmp = tmp.split(";")
+            self.range = [list(map(float, t.split())) for t in tmp]
         except:
-            self.rangex = self.LIMIT_X
-            self.rangey = self.LIMIT_Y
-        f = paint_function(self.rangex, self.rangey, self.function)
+            self.range = [self.LIMIT_X, self.LIMIT_Y]
+        try:
+            self.chance = float(self.ui.proc_mutation.toPlainText())
+        except:
+            self.chance = 10
+        if draw:
+            f = paint_function(self.range, self.function)
+            scene = QtGui.QGraphicsScene()
+            scene.addPixmap(QtGui.QPixmap(f.name))
+            self.ui.graphicsView_2.setScene(scene)
+            f.close()
+            os.unlink(f.name)
+
         mi = int(self.ui.mi.toPlainText())
         lambd = int(self.ui.lambd.toPlainText())
-        self.genetic = Genetic(self.function, crossing, fmutation, strategy, mi, lambd, self.rangex, self.rangey)
+        self.genetic = Genetic(self.function, crossing, fmutation, strategy, mi, lambd, self.range, self.m, self.chance)
         self.steps = []
-
         self.ui.graphicsView_2.setViewport(QtOpenGL.QGLWidget())
-        scene = QtGui.QGraphicsScene()
-        scene.addPixmap(QtGui.QPixmap(f.name))
-        self.ui.graphicsView_2.setScene(scene)
-        f.close()
-        os.unlink(f.name)
         self.epochNumber = 0
 
     def epoch(self):
@@ -95,10 +106,10 @@ class Optymalizacja(QtGui.QMainWindow):
         self.ui.epochNumber.display(self.epochNumber)
         self.genetic.sort()
         self.ui.targetLabel.setText(str(round(self.genetic.population[0].cost, 7)))
-        self.ui.coordsLabel.setText("Rozwiązanie: x: {0} y: {1}".format(round(self.genetic.population[0].getValueX(self.rangex[0], self.rangex[1]), 7),
-                                                                        round(self.genetic.population[0].getValueY(self.rangey[0], self.rangey[1]), 7)))
-        self.steps.append((round(self.genetic.population[0].getValueX(self.rangex[0], self.rangex[1]), 7),
-                           round(self.genetic.population[0].getValueY(self.rangey[0], self.rangey[1]), 7)))
+        self.ui.coordsLabel.setText("Rozwiązanie: x: {0} y: {1}".format(round(self.genetic.population[0].getValue(self.range[0][0], self.range[0][1], 0), 7),
+                                                                        round(self.genetic.population[0].getValue(self.range[1][0], self.range[1][1], 1), 7)))
+        self.steps.append((round(self.genetic.population[0].getValue(self.range[0][0], self.range[0][1], 0), 7),
+                           round(self.genetic.population[0].getValue(self.range[1][0], self.range[1][1], 1), 7)))
 
     def complate(self):
         n = int(self.ui.n.toPlainText())
@@ -110,14 +121,37 @@ class Optymalizacja(QtGui.QMainWindow):
             self.epochNumber += 1
             self.ui.epochNumber.display(self.epochNumber)
             self.genetic.sort()
-            self.steps.append((round(self.genetic.population[0].getValueX(self.rangex[0], self.rangex[1]), 7),
-                           round(self.genetic.population[0].getValueY(self.rangey[0], self.rangey[1]), 7)))
+            self.steps.append((round(self.genetic.population[0].getValue(self.range[0][0], self.range[0][1], 0), 7),
+                           round(self.genetic.population[0].getValue(self.range[1][0], self.range[1][1], 1), 7)))
         self.ui.targetLabel.setText(str(round(self.genetic.population[0].cost, 7)))
-        self.ui.coordsLabel.setText("Rozwiązanie: x: {0} y: {1}".format(round(self.genetic.population[0].getValueX(self.rangex[0], self.rangex[1]), 7),
-                                                                        round(self.genetic.population[0].getValueY(self.rangey[0], self.rangey[1]), 7)))
+        self.ui.coordsLabel.setText("Rozwiązanie: x: {0} y: {1}".format(round(self.genetic.population[0].getValue(self.range[0][0], self.range[0][1], 0), 7),
+                                                                        round(self.genetic.population[0].getValue(self.range[1][0], self.range[1][1], 1), 7)))
+
+    def complate_without_draw(self):
+        self.calculate(False)
+        n = int(self.ui.n.toPlainText())
+        if not n:
+            raise TypeError('Nie podano warunku zakończenia')
+        for i in range(n):
+            self.genetic.sort()
+            self.genetic.newEpoch(self.epochNumber)
+            self.epochNumber += 1
+            self.ui.epochNumber.display(self.epochNumber)
+            self.genetic.sort()
+            self.steps.append(self.genetic.population[0].getValues(self.range))
+        self.ui.targetLabel.setText(str(round(self.genetic.population[0].cost, 7)))
+        result = self.genetic.population[0].getValues(self.range)
+        tmp = "Rozwiazanie: "
+        i = 1
+        for r in result:
+            tmp += "x{0} = {1} ".format(i, round(r, 6))
+            if i % 4 == 0:
+                tmp += '\n'
+            i += 1
+        self.ui.coordsLabel.setText(tmp)
 
     def draw(self):
-        f = paint_function(self.rangex, self.rangey, self.function, self.steps)
+        f = paint_function(self.range, self.function, self.steps)
         scene = QtGui.QGraphicsScene()
         scene.addPixmap(QtGui.QPixmap(f.name))
         self.ui.graphicsView_2.setScene(scene)
