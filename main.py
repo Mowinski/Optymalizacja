@@ -29,6 +29,7 @@ class Optymalizacja(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.drawButton, QtCore.SIGNAL("clicked()"), self.draw)
         QtCore.QObject.connect(self.ui.complate, QtCore.SIGNAL("clicked()"), self.complate)
         QtCore.QObject.connect(self.ui.complate_without_draw, QtCore.SIGNAL("clicked()"), self.complate_without_draw)
+        QtCore.QObject.connect(self.ui.points, QtCore.SIGNAL("clicked()"), self.points)
 
     def calculate(self, draw=True):
         # Cross
@@ -64,7 +65,6 @@ class Optymalizacja(QtGui.QMainWindow):
             m = re.findall("x\[\d\]", tmp_function)
             chop = lambda x: int(x[2:-1])
             self.m = max(list(map(chop, m))) + 1
-            print(self.m)
         if self.ui.strategy_genetic.isChecked():
             strategy = 'genetic'
         elif self.ui.strategy_two.isChecked():
@@ -81,7 +81,7 @@ class Optymalizacja(QtGui.QMainWindow):
         except:
             self.range = [self.LIMIT_X, self.LIMIT_Y]
         try:
-            self.chance = float(self.ui.proc_mutation.toPlainText())
+            self.chance = float(self.ui.proc_mutation.toPlainText().split(';')[0])
         except:
             self.chance = 10
         if draw:
@@ -157,6 +157,12 @@ class Optymalizacja(QtGui.QMainWindow):
         self.ui.graphicsView_2.setScene(scene)
         f.close()
         os.unlink(f.name)
+
+    def points(self):
+        with open('points.txt', 'w') as f:
+            for point in self.steps:
+                f.write("{0} : {1}\n".format(str(point), self.function(*point)))
+        pass
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

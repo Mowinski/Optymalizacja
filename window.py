@@ -104,12 +104,16 @@ class MainForm(object):
         self.drawButton.setObjectName("drewButton")
         # LICZNIK
         self.epochNumber = QtGui.QLCDNumber(Form)
-        self.epochNumber.setGeometry(QtCore.QRect(720, 80, 50, 27))
+        self.epochNumber.setGeometry(QtCore.QRect(720, 80, 58, 27))
         self.epochNumber.setObjectName("epochNumber")
         # Rozwiaz
         self.complate = QtGui.QPushButton(Form)
-        self.complate.setGeometry(QtCore.QRect(660, 110, 50, 27))
+        self.complate.setGeometry(QtCore.QRect(660, 110, 60, 27))
         self.complate.setObjectName("complateButton")
+        # Punkty
+        self.points = QtGui.QPushButton(Form)
+        self.points.setGeometry(QtCore.QRect(720, 110, 60, 27))
+        self.points.setObjectName("pointsButton")
         # Rozwiaz bez rysowania
         self.complate_without_draw = QtGui.QPushButton(Form)
         self.complate_without_draw.setGeometry(QtCore.QRect(660, 140, 120, 27))
@@ -168,7 +172,7 @@ class MainForm(object):
         self.n.setObjectName("n")
         # % Mutacji
         self.proc_mutation_label = QtGui.QLabel(Form)
-        self.proc_mutation_label.setGeometry(QtCore.QRect(560, 30, 50, 30))
+        self.proc_mutation_label.setGeometry(QtCore.QRect(560, 30, 80, 30))
         self.proc_mutation_label.setObjectName("procent_mutation")
         # EDIT ILOSC ITERACJI
         self.proc_mutation = QtGui.QTextEdit(Form)
@@ -182,6 +186,7 @@ class MainForm(object):
         Form.setWindowTitle(QtGui.QApplication.translate("Form", "Form", None, QtGui.QApplication.UnicodeUTF8))
         self.calculateButton.setText(QtGui.QApplication.translate("Form", "Rysuj", None, QtGui.QApplication.UnicodeUTF8))
         self.complate.setText(QtGui.QApplication.translate("Form", "Rozwiaz", None, QtGui.QApplication.UnicodeUTF8))
+        self.points.setText(QtGui.QApplication.translate("Form", "Punkty", None, QtGui.QApplication.UnicodeUTF8))
         self.complate_without_draw.setText(QtGui.QApplication.translate("Form", "Rozwiaz bez rysowania", None, QtGui.QApplication.UnicodeUTF8))
         self.selection.setTitle(QtGui.QApplication.translate("Form", "Krzyżowanie", None, QtGui.QApplication.UnicodeUTF8))
         self.cross_simple_2.setText(QtGui.QApplication.translate("Form", "Proste", None, QtGui.QApplication.UnicodeUTF8))
@@ -215,13 +220,13 @@ class MainForm(object):
         self.milabel.setText(QtGui.QApplication.translate("Form", "mi (N):", None, QtGui.QApplication.UnicodeUTF8))
         self.lambdalabel.setText(QtGui.QApplication.translate("Form", "lambda:", None, QtGui.QApplication.UnicodeUTF8))
         self.nlabel.setText(QtGui.QApplication.translate("Form", "Ilość iter.", None, QtGui.QApplication.UnicodeUTF8))
-        self.proc_mutation_label.setText(QtGui.QApplication.translate("Form", "% mutacji", None, QtGui.QApplication.UnicodeUTF8))
+        self.proc_mutation_label.setText(QtGui.QApplication.translate("Form", "% mutacji i krzy.", None, QtGui.QApplication.UnicodeUTF8))
 
         # default text edit
         self.mi.setText("100")
         self.lambd.setText("100")
         self.n.setText("50")
         self.range.setText("-5 5; -5 5")
-        self.proc_mutation.setText("10")
+        self.proc_mutation.setText("10 ; 10")
         #self.function_recipce.setText("sin(x[0])+cos(x[1])+sin(x[2]*x[3])+cos(x[4]*x[5])")
         self.function_recipce.setText("(x[0]-2)**2+(x[0]-x[1]**2)**2")
